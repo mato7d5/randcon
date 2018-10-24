@@ -21,6 +21,7 @@ Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1
 #include <fstream>
 #include <algorithm>
 #include <functional>
+#include <utility>
 
 using std::filesystem::path;
 using std::make_unique;
@@ -65,6 +66,7 @@ bool RandCon::run() {
 
     vector<string> allLines;
 
+    string line;
     for (const auto& file : inputFiles) {
         path p(file);
         ifstream inputStream = ifstream(p, std::ios::in);
@@ -74,9 +76,8 @@ bool RandCon::run() {
             return false;
         }
 
-        string line;
         while (std::getline(inputStream, line)) {
-            allLines.push_back(line);
+            allLines.push_back(std::move(line));
         }
 
         inputStream.close();
