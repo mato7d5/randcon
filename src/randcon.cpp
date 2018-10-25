@@ -13,6 +13,7 @@ Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1
 */
 
 #include "randcon.h"
+#include "MemoryMappedInputFile.h"
 
 #include <filesystem>
 #include <memory>
@@ -68,19 +69,11 @@ bool RandCon::run() {
 
     string line;
     for (const auto& file : inputFiles) {
-        path p(file);
-        ifstream inputStream = ifstream(p, std::ios::in);
-
-        if (!inputStream.is_open()) {
-            cerr << "Cannot open file: " << file << '\n';
-            return false;
-        }
-
-        while (std::getline(inputStream, line)) {
-            allLines.push_back(std::move(line));
-        }
-
-        inputStream.close();
+        MemoryMappedInputFile inputFile(file);
+        vector<string> fileLines;
+        
+        if (inputFile.getLines(fileLines) > 0) 
+            allLines.insert(allLines.end(), fileLines.begin(), fileLines.end());
     } 
 
     random_device rd;
