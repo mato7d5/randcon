@@ -27,7 +27,8 @@ int main(int argc, char** argv) {
     ("help", "Show help message.")
     ("input", po::value<vector<string>>()->multitoken(), "Input files.")
     ("output", po::value<string>(), "Output file. Default is standard output.")
-    ("lines", po::value<unsigned long>()->implicit_value(0), "Choose only given number of lines. Default all lines.");
+    ("lines", po::value<unsigned long>()->implicit_value(0), "Choose only given number of lines. Default all lines.")
+    ("memory_map", po::value<bool>()->implicit_value(false), "Map input file into memory. Usefull for large input files.");
 
     po::variables_map vm;
     po::store(po::parse_command_line(argc, argv, desc), vm);

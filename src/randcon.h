@@ -30,6 +30,7 @@ private:
     vector<string> inputFiles;
     unique_ptr<ofstream> output;
     unsigned long outLines;
+    bool memoryMapped;
 
 public:
     explicit RandCon(const vector<string>& input);
@@ -43,6 +44,7 @@ public:
 
     void setOutputFile(const string& filename);
     void selectMaxLines(unsigned long lines) { outLines = lines; }
+    void setMemoryMapped(bool val) { memoryMapped = val; }
 
     bool run();
 };

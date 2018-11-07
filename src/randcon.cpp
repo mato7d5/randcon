@@ -14,6 +14,7 @@ Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1
 
 #include "randcon.h"
 #include "MemoryMappedInputFile.h"
+#include "StandardInputFile.h"
 
 #include <filesystem>
 #include <memory>
@@ -39,6 +40,7 @@ RandCon::RandCon(const vector<string>& input) {
     inputFiles = input;
     output = nullptr;
     outLines = 0;
+    memoryMapped = false;
 }
 
 // dtor
@@ -69,10 +71,16 @@ bool RandCon::run() {
 
     string line;
     for (const auto& file : inputFiles) {
-        MemoryMappedInputFile inputFile(file);
+   //     MemoryMappedInputFile inputFile(file);
+        unique_ptr<InputFile> inputFile = nullptr;
+        if (memoryMapped)
+            inputFile = std::make_unique<MemoryMappedInputFile> (file);
+        else
+            inputFile = std::make_unique<StandardInputFile> (file);
+
         vector<string> fileLines;
         
-        if (inputFile.getLines(fileLines) > 0) 
+        if (inputFile->getLines(fileLines) > 0) 
             allLines.insert(allLines.end(), fileLines.begin(), fileLines.end());
     } 
 
